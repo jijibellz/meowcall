@@ -1,0 +1,24 @@
+# Node modules (these can be reinstalled)
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Build stuff (if you later bundle or use a frontend build)
+dist/
+build/
+
+# IDE / Editor stuff
+.vscode/
+.idea/
