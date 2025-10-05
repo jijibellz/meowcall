@@ -1,9 +1,15 @@
 const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
-const io = require("socket.io")(http);
-const PORT = 3000;
+const { Server } = require("socket.io");
+const io = new Server(http, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
+const PORT = process.env.PORT || 3000;
 app.use(express.static("public"));
 
 const rooms = {};
@@ -16,13 +22,13 @@ io.on("connection", (socket) => {
     rooms[roomId].push(socket.id);
     socket.join(roomId);
 
-    console.log(`User ${socket.id} joined ${roomId}`);
+    console.log(`User ${socket.id} joined room ${roomId}`);
 
-    // Tell the new user who’s already there
+    // Send list of other users in the room
     const others = rooms[roomId].filter((id) => id !== socket.id);
     socket.emit("all-users", others);
 
-    // Tell others that a new user joined
+    // Notify others
     socket.to(roomId).emit("user-joined", socket.id);
   });
 
